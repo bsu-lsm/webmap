@@ -1,0 +1,1803 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background: linear-gradient(135deg, #000b18 0%, #0052a2 100%);
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.map-container,
+.legend-section,
+.model-data-section {
+    width: 100%;
+    margin-bottom: 2rem;
+    border-radius: 15px;
+    box-sizing: border-box;
+    background: white;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    padding: 2rem;
+}
+
+/* Navigation */
+nav {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    transition: all 0.3s ease;
+    transform: translateY(0);
+    transition: transform 0.3s ease, background 0.3s ease;
+}
+
+nav.nav-hidden {
+    transform: translateY(-100%);
+}
+
+nav.scrolled {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(15px);
+}
+
+nav .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 20px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white;
+}
+
+.logo .institution-logo {
+    height: 40px;
+    width: auto;
+    /* Optional: add a subtle glow effect */
+    filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.3));
+}
+
+/* Adjust for mobile screens */
+@media (max-width: 768px) {
+    .logo {
+        font-size: 1.2rem;
+    }
+    
+    .logo .institution-logo {
+        height: 30px;
+    }
+    
+    .logo span {
+        display: none; /* Optional: hide text on very small screens */
+    }
+}
+
+nav.scrolled .logo {
+    color: #333;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+}
+
+nav.scrolled .nav-links a {
+    color: #333;
+}
+
+.nav-links a:hover, .nav-links a.active {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+/* Page Content */
+.page {
+    display: none;
+    min-height: 100vh;
+    padding-top: 100px;
+}
+
+.page.active {
+    display: block;
+}
+
+/* Landing Page */
+.hero {
+    text-align: center;
+    padding: 1.5rem 0 4rem 0;
+    color: white;
+}
+
+.hero h1 {
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    animation: fadeInUp 1s ease;
+}
+
+.hero h1 + p {
+    margin-top: 0rem; /* Adjust as needed */
+}
+
+.hero p {
+    font-size: 1.3rem;
+    margin-top: 0rem;
+    margin-bottom: 3rem;
+    opacity: 0.9;
+    animation: fadeInUp 1s ease 0.2s both;
+}
+
+.institution-logos {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 4rem;
+    flex-wrap: wrap;
+    animation: fadeInUp 1s ease 0.4s both;
+}
+
+.institution-logos .partner-logo {
+    width: 70px;           /* Adjust size as needed */
+    height: 70px;
+    background: none !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+
+.logo-placeholder {
+    width: 150px;
+    height: 150px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px dashed rgba(255, 255, 255, 0.3);
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.logo-placeholder:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-5px);
+}
+
+/* Map Page */
+
+.map-viewer {
+    width: 100%;
+    height: 600px;
+    background: #f8f9fa;
+    border: 2px dashed #dee2e6;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    color: #6c757d;
+    font-size: 1.1rem;
+}
+
+.btn {
+    background: linear-gradient(135deg, #000b18 0%, #0052a2 100%);
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+}
+
+/* Export modal styles */
+#export-modal-overlay {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.export-modal-button {
+    transition: all 0.3s ease !important;
+}
+
+.export-modal-button:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2) !important;
+}
+
+/* Fullscreen styles */
+.map-container:fullscreen {
+    padding: 0;
+    background: #000;
+}
+
+.map-container:fullscreen .map-viewer {
+    height: 100vh !important;
+    border-radius: 0;
+    border: none;
+}
+
+/* Embedded Map Controls */
+.embedded-control {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    z-index: 1002;
+    gap: 8px; /* spacing between buttons */
+}
+
+.embedded-btn {
+    background: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    color: #333;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    padding: 8px;
+    width: auto;
+    height: auto;
+}
+
+.embedded-btn:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.embedded-btn:hover,
+.risk-toggle-icon:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+    background: #f0f4ff;
+}
+
+.embedded-btn.fullscreen-active {
+    background: #e6ffe6;
+    box-shadow: 0 4px 12px rgba(0,128,0,0.18);
+}
+
+.embedded-btn.fullscreen-active:hover {
+    background: #e6ffe6;
+    box-shadow: 0 4px 12px rgba(0,128,0,0.18);
+}
+
+.risk-toggle-btn,
+.embedded-btn {
+    width: 44px;
+    height: 44px;
+    background: #fff;
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    cursor: pointer;
+    transition: box-shadow 0.2s, background 0.2s;
+    padding: 0;
+    margin: 0;
+    margin-bottom: 8px;
+}
+
+.embedded-btn.fullscreen-active {
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.embedded-btn.hidden {
+    display: none;
+    background: #f0f4ff;
+}
+
+.embedded-btn.fullscreen-active {
+    background: #e6ffe6;
+    box-shadow: 0 4px 12px rgba(0,128,0,0.18);
+}
+
+/* Results Page */
+.results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.result-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 2rem;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.result-card:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.result-card h3 {
+    margin-bottom: 1rem;
+    color: #fff;
+}
+
+.chart-placeholder {
+    width: 100%;
+    height: 200px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 1rem 0;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* About Page */
+.about-content {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 3rem;
+    color: white;
+    margin-bottom: 2rem;
+}
+
+.about-section {
+    margin-bottom: 3rem;
+}
+
+.about-section h2 {
+    margin-bottom: 1rem;
+    color: #fff;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+    padding-bottom: 0.5rem;
+}
+
+.social-icon {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    margin-right: 0.6rem;
+    vertical-align: middle;
+    border-radius: 4px;
+}
+
+.social-links {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+}
+@media (max-width: 600px) {
+    .social-links {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+}
+
+.social-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: white;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 25px;
+    transition: all 0.3s ease;
+}
+
+.social-link:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .nav-links {
+        display: none;
+    }
+
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+
+    .institution-logos {
+        gap: 1.5rem;
+    }
+
+    .logo-placeholder {
+        width: 120px;
+        height: 120px;
+    }
+
+    .results-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeInUp 0.6s ease;
+}
+
+.partners-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.partner-card {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: all 0.3s ease;
+}
+
+.partner-card:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.partner-logo {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 0.5rem;
+    border-radius: 10px;
+}
+
+.partner-info {
+    flex: 1;
+}
+
+.partner-info h3 {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    color: white;
+}
+
+.partner-info p {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+#home .container {
+    min-height: calc(100vh - 100px); /* Adjust for navbar height */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#home {
+    position: relative;
+    overflow: hidden;
+}
+
+#home .video-bg {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    overflow: hidden;
+}
+
+#home .video-bg video {
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    min-width: 100%;
+    min-height: 100%;
+    position: absolute;
+    top: 0; left: 0;
+    z-index: 0;
+}
+
+#home .container {
+    position: relative;
+    z-index: 1;
+}
+
+#home .video-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(10, 24, 48, 0.45); /* dark blue overlay */
+    z-index: 1;
+    pointer-events: none;
+}
+
+.partner-card-link {
+    display: block;
+}
+
+.partner-card-link:hover .partner-card {
+    box-shadow: 0 4px 16px rgba(0,82,162,0.15);
+    background: rgba(0,82,162,0.08);
+}
+
+.partner-card-link,
+.partner-card-link:visited,
+.partner-card-link:active,
+.partner-card-link:hover,
+.partner-card-link * {
+    color: white !important;
+}
+
+.legend {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 12px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+.legend-title {
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #333;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 4px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    margin: 4px 0;
+}
+
+.legend-color {
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
+    border: 1px solid #333;
+    border-radius: 3px;
+}
+
+.legend-label {
+    font-size: 11px;
+    color: #333;
+}
+
+.custom-control {
+    background: rgba(255, 255, 255, 0.9);
+    margin: 2px;
+    border-radius: 4px;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.2);
+}
+
+.control-btn {
+    background: white;
+    border: none;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+}
+
+.control-btn:hover {
+    background: #f0f0f0;
+}
+
+.landslide-popup {
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 13px;
+}
+
+.popup-row {
+    margin: 6px 0;
+    color: #333;
+}
+
+.popup-btn {
+    background: #0052a2;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 11px;
+}
+
+.popup-btn:hover {
+    background: #003d7a;
+}
+
+#loading-indicator {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.7);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loading-content {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #0052a2;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 15px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.opacity-control {
+    background: white;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    font-family: Arial, sans-serif;
+    margin: 10px;
+}
+
+.opacity-control-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+}
+
+.opacity-label {
+    font-size: 12px;
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.opacity-slider {
+    width: 80px;
+    height: 4px;
+    background: #ddd;
+    border-radius: 2px;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.opacity-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #007cba;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.opacity-slider::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #007cba;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.opacity-value {
+    font-size: 11px;
+    color: #666;
+    font-weight: bold;
+    min-width: 30px;
+}
+
+.leaflet-control-layers.leaflet-control {
+    font-size: 12px !important;
+    max-width: 150px !important;
+}
+
+.leaflet-control-layers .leaflet-control-layers-list {
+    margin: 5px 8px !important;
+}
+
+.leaflet-control-layers input[type="radio"],
+.leaflet-control-layers input[type="checkbox"] {
+    margin-right: 4px !important;
+}
+
+.leaflet-control-layers label {
+    font-size: 11px !important;
+    font-weight: normal !important;
+    margin: 2px 0 !important;
+}
+
+/* Compact Scale Control - More Specific */
+.leaflet-control-scale.leaflet-control {
+    font-size: 10px !important;
+    line-height: 1.2 !important;
+}
+
+.leaflet-control-scale .leaflet-control-scale-line {
+    border: 1px solid #777 !important;
+    border-top: none !important;
+    color: #333 !important;
+    font-size: 9px !important;
+    padding: 1px 3px !important;
+}
+
+/* Compact Attribution - More Specific */
+.leaflet-control-attribution.leaflet-control {
+    font-size: 8px !important;
+    line-height: 1.2 !important;
+    padding: 2px 4px !important;
+    background: rgba(255, 255, 255, 0.8) !important;
+}
+
+.leaflet-control-attribution a {
+    font-size: 8px !important;
+    text-decoration: none !important;
+}
+
+/* Risk Zone Toggle Control Styles */
+.risk-zone-toggle-control {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    background: none;
+    box-shadow: none;
+    position: relative;
+    z-index: 1002;
+}
+
+.embedded-btn,
+.risk-toggle-icon {
+    width: 44px;
+    height: 44px;
+    background: #fff;
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    cursor: pointer;
+    transition: box-shadow 0.2s, background 0.2s;
+    padding: 0;
+    margin: 0;
+}
+
+.toggle-control-header {
+    background: linear-gradient(135deg, #000b18 0%, #0052a2 100%);
+    color: white;
+    padding: 10px 12px;
+    border-radius: 8px 8px 0 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.toggle-control-header span {
+    flex: 1;
+}
+
+.toggle-all-btn {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 0;
+    transition: all 0.2s ease;
+}
+
+.toggle-all-btn:hover {
+    transform: scale(1.1);
+    opacity: 0.8;
+}
+
+.toggle-control-body {
+    padding: 8px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.risk-toggle-item {
+    margin: 6px 0;
+}
+
+.risk-toggle-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 12px;
+    padding: 4px 6px;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+
+.risk-toggle-label:hover {
+    background: rgba(0, 82, 162, 0.1);
+}
+
+.risk-toggle-label input[type="checkbox"] {
+    margin: 0;
+    cursor: pointer;
+}
+
+.risk-color-indicator {
+    width: 16px;
+    height: 16px;
+    border-radius: 3px;
+    border: 1px solid #333;
+    flex-shrink: 0;
+}
+
+.risk-level-text {
+    flex: 1;
+    font-weight: 500;
+    color: #333;
+}
+
+.feature-count {
+    background: rgba(0, 82, 162, 0.1);
+    color: #0052a2;
+    font-size: 10px;
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 10px;
+    min-width: 20px;
+    text-align: center;
+}
+
+/* Scrollbar styles for toggle control */
+.toggle-control-body::-webkit-scrollbar {
+    width: 4px;
+}
+
+.toggle-control-body::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 2px;
+}
+
+.toggle-control-body::-webkit-scrollbar-thumb {
+    background: #0052a2;
+    border-radius: 2px;
+}
+
+.toggle-control-body::-webkit-scrollbar-thumb:hover {
+    background: #003d7a;
+}
+
+/* Enhanced opacity control */
+.opacity-control {
+    background: white;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    font-family: Arial, sans-serif;
+    margin: 10px;
+}
+
+.opacity-control-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+}
+
+.opacity-label {
+    font-size: 12px;
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.opacity-slider {
+    width: 80px;
+    height: 4px;
+    background: #ddd;
+    border-radius: 2px;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.opacity-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #007cba;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.opacity-slider::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #007cba;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.opacity-value {
+    font-size: 11px;
+    color: #666;
+    font-weight: bold;
+    min-width: 30px;
+}
+
+/* Enhanced legend styles */
+.legend {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 12px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+.legend-title {
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #333;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    margin: 4px 0;
+}
+
+.legend-color {
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
+    border: 1px solid #333;
+    border-radius: 3px;
+}
+
+.legend-label {
+    font-size: 11px;
+    color: #333;
+    font-weight: 500;
+}
+
+/* Enhanced popup styles */
+.landslide-popup {
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 13px;
+}
+
+.popup-row {
+    margin: 6px 0;
+    color: #333;
+}
+
+.popup-btn {
+    background: #0052a2;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 11px;
+    transition: background-color 0.2s ease;
+}
+
+.popup-btn:hover {
+    background: #003d7a;
+}
+
+/* Loading indicator styles */
+#loading-indicator {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.7);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loading-content {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #0052a2;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 15px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Custom control styles */
+.custom-control {
+    background: rgba(255, 255, 255, 0.9);
+    margin: 2px;
+    border-radius: 4px;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.2);
+}
+
+.control-btn {
+    background: white;
+    border: none;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+}
+
+.control-btn:hover {
+    background: #f0f0f0;
+}
+
+/* Leaflet control overrides for better compact display */
+.leaflet-control-layers.leaflet-control {
+    font-size: 12px !important;
+    max-width: 150px !important;
+}
+
+.leaflet-control-layers .leaflet-control-layers-list {
+    margin: 5px 8px !important;
+}
+
+.leaflet-control-layers input[type="radio"],
+.leaflet-control-layers input[type="checkbox"] {
+    margin-right: 4px !important;
+}
+
+.leaflet-control-layers label {
+    font-size: 11px !important;
+    font-weight: normal !important;
+    margin: 2px 0 !important;
+}
+
+/* Compact Scale Control */
+.leaflet-control-scale.leaflet-control {
+    font-size: 10px !important;
+    line-height: 1.2 !important;
+}
+
+.leaflet-control-scale .leaflet-control-scale-line {
+    border: 1px solid #777 !important;
+    border-top: none !important;
+    color: #333 !important;
+    font-size: 9px !important;
+    padding: 1px 3px !important;
+}
+
+/* Compact Attribution */
+.leaflet-control-attribution.leaflet-control {
+    font-size: 8px !important;
+    line-height: 1.2 !important;
+    padding: 2px 4px !important;
+    background: rgba(255, 255, 255, 0.8) !important;
+}
+
+.leaflet-control-attribution a {
+    font-size: 8px !important;
+    text-decoration: none !important;
+}
+
+.leaflet-control-zoom {
+    margin-bottom: 8px;
+}
+
+/* Risk zone hover effects */
+.risk-zone-low:hover {
+    filter: brightness(1.2);
+}
+
+.risk-zone-moderate:hover {
+    filter: brightness(1.2);
+}
+
+.risk-zone-high:hover {
+    filter: brightness(1.2);
+}
+
+.risk-zone-extreme:hover {
+    filter: brightness(1.2);
+}
+
+/* Mobile responsiveness for toggle control */
+@media (max-width: 768px) {
+    .risk-zone-toggle-control {
+        min-width: 160px;
+        max-width: 180px;
+        font-size: 11px;
+    }
+    
+    .toggle-control-header {
+        padding: 8px 10px;
+        font-size: 12px;
+    }
+    
+    .risk-toggle-label {
+        font-size: 11px;
+        padding: 3px 4px;
+    }
+    
+    .risk-color-indicator {
+        width: 14px;
+        height: 14px;
+    }
+    
+    .feature-count {
+        font-size: 9px;
+        padding: 1px 4px;
+    }
+    
+    .opacity-control {
+        padding: 8px;
+    }
+    
+    .opacity-slider {
+        width: 60px;
+    }
+}
+
+/* Animation for toggle control appearance */
+.risk-zone-toggle-control {
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Enhanced checkbox styles */
+.risk-toggle-label input[type="checkbox"] {
+    width: 14px;
+    height: 14px;
+    accent-color: #0052a2;
+}
+
+/* Tooltip styles for better UX */
+.toggle-control-header [title],
+.risk-toggle-label [title] {
+    position: relative;
+}
+
+/* Focus styles for accessibility */
+.risk-toggle-label input[type="checkbox"]:focus {
+    outline: 2px solid #0052a2;
+    outline-offset: 2px;
+}
+
+.toggle-all-btn:focus {
+    outline: 2px solid rgba(255, 255, 255, 0.5);
+    outline-offset: 2px;
+}
+
+/* Enhanced visual feedback */
+.risk-toggle-label input[type="checkbox"]:checked + .risk-color-indicator {
+    box-shadow: 0 0 0 2px #0052a2;
+}
+
+.risk-toggle-label input[type="checkbox"]:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.risk-toggle-label input[type="checkbox"]:disabled + .risk-color-indicator {
+    opacity: 0.5;
+}
+
+/* Empty state styles */
+.toggle-control-body .no-data {
+    text-align: center;
+    padding: 20px 10px;
+    color: #666;
+    font-size: 11px;
+    font-style: italic;
+}
+
+/* Transition effects for layer visibility changes */
+.leaflet-overlay-pane svg {
+    transition: opacity 0.3s ease;
+}
+
+.risk-zone-toggle-control {
+    position: relative;
+    z-index: 1000;
+}
+
+.risk-toggle-icon {
+    background: #fff;
+    border: none;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    padding: 8px;
+    cursor: pointer;
+    font-size: 18px;
+    margin-bottom: 4px;
+}
+
+.risk-toggle-panel {
+    position: absolute;
+    top: 0;
+    left: 50px; /* Position to the right of the buttons */
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+    padding: 0;
+    min-width: 200px;
+    z-index: 1003;
+    display: none;
+}
+
+/* Only show the panel box when display is block */
+.risk-toggle-panel[style*="display: block"] {
+    border: 1px solid rgba(255,255,255,0.2);
+    backdrop-filter: blur(15px);
+}
+
+/* Hide the panel when display is none */
+.risk-toggle-panel {
+    display: none;
+}
+
+/* Only show the panel box when display is block */
+.risk-toggle-panel[style*="display: block"] {
+    display: block;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    padding: 10px;
+    min-width: 180px;
+}
+
+/* Only apply blur and background when panel is visible */
+.risk-zone-toggle-control.panel-active {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    border-radius: 12px;
+    padding: 8px;
+}
+
+.model-data-section {
+    margin: 2rem 0;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 10px;
+}
+
+.model-data-section h2 {
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    color: #222;
+    text-align: left;
+}
+
+.model-data-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+}
+
+.model-data-img {
+    width: 100%;
+    height: 180px;           /* Fixed height for grid uniformity */
+    object-fit: contain;     /* Show entire image, no cropping */
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+    background: #eee;
+    display: block;
+}
+
+.model-data-img:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+}
+
+/* 3D Toggle Control Styles */
+.toggle-3d-control {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    margin: 10px;
+}
+
+.control-3d-btn {
+    width: 44px;
+    height: 44px;
+    background: linear-gradient(135deg, #000b18 0%, #0052a2 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    padding: 0;
+    margin: 0;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.control-3d-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 82, 162, 0.3);
+}
+
+.control-3d-btn.active-3d {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(40, 167, 69, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0); }
+}
+
+.mode-text {
+    font-weight: bold;
+    font-size: 8px;
+    line-height: 1;
+}
+
+/* Mapbox 3D Controls */
+.mapbox-3d-controls {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.control-group {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 8px;
+    padding: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    display: flex;
+    gap: 4px;
+}
+
+.terrain-btn, .pitch-btn {
+    background: rgba(0, 82, 162, 0.1);
+    color: #0052a2;
+    border: 1px solid rgba(0, 82, 162, 0.3);
+    padding: 6px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.terrain-btn:hover, .pitch-btn:hover {
+    background: rgba(0, 82, 162, 0.2);
+    transform: translateY(-1px);
+}
+
+.terrain-btn.active, .pitch-btn.active {
+    background: linear-gradient(135deg, #000b18 0%, #0052a2 100%);
+    color: white;
+    border-color: #0052a2;
+    box-shadow: 0 2px 6px rgba(0, 82, 162, 0.3);
+}
+
+/* Enhanced Mapbox popup styles */
+.mapboxgl-popup-content {
+    border-radius: 8px !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15) !important;
+    padding: 15px !important;
+    max-width: 250px !important;
+}
+
+.mapboxgl-popup-tip {
+    border-top-color: white !important;
+}
+
+/* 3D Map container enhancements */
+.mapboxgl-map {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+/* Custom Mapbox navigation control styling */
+.mapboxgl-ctrl-group {
+    border-radius: 6px !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+}
+
+.mapboxgl-ctrl button {
+    border-radius: 0 !important;
+}
+
+.mapboxgl-ctrl-group button:first-child {
+    border-radius: 6px 6px 0 0 !important;
+}
+
+.mapboxgl-ctrl-group button:last-child {
+    border-radius: 0 0 6px 6px !important;
+}
+
+/* Enhanced loading indicator for 3D */
+.loading-3d {
+    background: linear-gradient(135deg, #000b18 0%, #0052a2 100%);
+    color: white;
+}
+
+.loading-3d .spinner {
+    border-top-color: #20c997;
+}
+
+/* 3D specific legend enhancements */
+.legend-3d {
+    background: rgba(0, 11, 24, 0.9);
+    color: white;
+    backdrop-filter: blur(15px);
+}
+
+.legend-3d .legend-title {
+    border-bottom-color: rgba(255, 255, 255, 0.3);
+    color: white;
+}
+
+.legend-3d .legend-label {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+/* Animation for 3D mode transition */
+.map-transition {
+    transition: all 0.5s ease-in-out;
+}
+
+/* Enhanced risk zone toggle for 3D mode */
+.risk-zone-toggle-control.mode-3d {
+    background: rgba(0, 11, 24, 0.9);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.risk-zone-toggle-control.mode-3d .toggle-control-header {
+    background: linear-gradient(135deg, #20c997 0%, #28a745 100%);
+}
+
+.risk-zone-toggle-control.mode-3d .risk-level-text {
+    color: white;
+}
+
+.risk-zone-toggle-control.mode-3d .risk-toggle-label:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Mapbox Custom Controls */
+.mapbox-custom-controls {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    z-index: 1002;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.mapbox-control-btn {
+    width: 44px;
+    height: 44px;
+    background: #fff;
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    cursor: pointer;
+    transition: box-shadow 0.2s, background 0.2s;
+    padding: 0;
+    margin: 0;
+    color: #333;
+}
+
+.mapbox-control-btn:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+    background: #f0f4ff;
+}
+
+.mapbox-control-btn.fullscreen-active {
+    background: #e6ffe6;
+    box-shadow: 0 4px 12px rgba(0,128,0,0.18);
+}
+
+/* 3D mode specific adjustments */
+.mapboxgl-map .mapbox-custom-controls {
+    z-index: 1002;
+}
+
+.mapboxgl-ctrl-top-right {
+    top: 16px;
+    right: 16px;
+}
+
+.mapboxgl-ctrl-bottom-right {
+    bottom: 16px;
+    right: 16px;
+}
+
+/* Modern Forced Colors Mode support (replaces deprecated -ms-high-contrast) */
+@media (forced-colors: active) {
+    .embedded-btn,
+    .control-3d-btn,
+    .mapbox-control-btn {
+        border: 1px solid ButtonText !important;
+        background: ButtonFace !important;
+        color: ButtonText !important;
+    }
+    
+    .risk-toggle-panel {
+        border: 1px solid ButtonText !important;
+        background: Canvas !important;
+    }
+    
+    .legend {
+        border: 1px solid ButtonText !important;
+        background: Canvas !important;
+    }
+}
+
+/* High contrast mode support for better accessibility */
+@media (prefers-contrast: high) {
+    .embedded-btn,
+    .control-3d-btn,
+    .mapbox-control-btn {
+        border: 2px solid currentColor;
+        background: white;
+        color: black;
+    }
+    
+    .embedded-btn:hover,
+    .control-3d-btn:hover,
+    .mapbox-control-btn:hover {
+        background: black;
+        color: white;
+    }
+}
+
+/* 3D Mode Opacity Control Styling */
+.mapbox-opacity-control input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 4px;
+    border-radius: 2px;
+    background: #ddd;
+    outline: none;
+    cursor: pointer;
+}
+
+.mapbox-opacity-control input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #000b18 0%, #0052a2 100%);
+    cursor: pointer;
+    border: 2px solid white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.mapbox-opacity-control input[type="range"]::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #000b18 0%, #0052a2 100%);
+    cursor: pointer;
+    border: 2px solid white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Bottom-left opacity control styling */
+.mapbox-opacity-control-bottom {
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.mapbox-opacity-control-bottom input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 4px;
+    border-radius: 2px;
+    background: #ddd;
+    outline: none;
+    cursor: pointer;
+}
+
+.mapbox-opacity-control-bottom input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #000b18 0%, #0052a2 100%);
+    cursor: pointer;
+    border: 2px solid white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.mapbox-opacity-control-bottom input[type="range"]::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #000b18 0%, #0052a2 100%);
+    cursor: pointer;
+    border: 2px solid white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Terrain control integration with zoom controls */
+.mapboxgl-ctrl-terrain {
+    width: 29px !important;
+    height: 29px !important;
+    border: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #fff !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    transition: background-color 0.2s, color 0.2s !important;
+    border-radius: 0 !important;
+    border-bottom-left-radius: 4px !important;
+    border-bottom-right-radius: 4px !important;
+}
+
+.mapboxgl-ctrl-terrain:hover {
+    background-color: rgba(0,0,0,.05) !important;
+}
+
+.mapboxgl-ctrl-terrain.terrain-active {
+    background-color: #3b82f6 !important;
+    color: white !important;
+}
+
+/* Separator styling for clarity */
+.mapboxgl-ctrl-zoom > div {
+    background: #ddd !important;
+    height: 1px !important;
+    margin: 4px auto !important;
+    width: 80% !important;
+}
