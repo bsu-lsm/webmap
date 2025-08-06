@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <!-- Mapbox GL JS for 3D terrain (loaded dynamically when needed) -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <title>Landslide Susceptibility Analysis - Bontoc, Mountain Province</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="container">
+            <div class="logo">
+                <img src="assets/logo/BSU_LOGO.png" alt="BSU Logo" class="institution-logo">
+                <span>Landslide Susceptibility Mapping Project</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#" onclick="showPage('home')" class="active">Home</a></li>
+                <li><a href="#" onclick="showPage('map')">Susceptibility Map</a></li>
+                <li><a href="#" onclick="showPage('results')">Results</a></li>
+                <li><a href="#" onclick="showPage('about')">About</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Home Page -->
+    <div id="home" class="page active">
+        <div class="video-bg">
+            <video autoplay muted loop playsinline>
+                <source src="assets/video/drone.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        <div class="video-overlay"></div>
+        <div class="container">
+            <div class="institution-logos">
+                    <img src="assets/logo/pcaarrd.png" alt="PCAARRD Logo" class="partner-logo">
+                    <img src="assets/logo/BSU_LOGO.png" alt="BSU Logo" class="partner-logo">
+                    <img src="assets/logo/GIS_LOGO.png" alt="GIS Logo" class="partner-logo">
+                    <img src="assets/logo/CF_LOGO.png" alt="CF Logo" class="partner-logo">
+            </div>
+            <div class="hero">
+                <h1>Landslide Susceptibility Modeling</h1>
+                <p>using Recursive Feature Elimination and Bayesian Ensemble Meta-Learning <br>
+                    with Spatial Uncertainty Propagation</p>
+                <p style="font-size: 1.1rem; opacity: 0.8;">Comprehensive geospatial analysis for risk assessment within <i><strong>Bontoc-Sagada Landscape</strong></i></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Map Page -->
+    <div id="map" class="page">
+        <div class="container">
+            <div class="map-container">
+                <div id="landslide-map" class="map-viewer" style="height: 600px;">
+                    <div style="text-align: center; padding-top: 250px;">
+                        <div class="spinner"></div>
+                        <p>Loading interactive map...</p>
+                    </div>
+                </div>
+            </div> 
+            <div class="legend-section">
+                <h3 style="margin-bottom: 1rem;">Map Legend & Information</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                    <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                        <strong>Extreme Risk</strong><br>
+                        <span style="color: #8b0000;">■</span> Susceptibility <br> 0.580 - 0.826
+                    </div>
+                    <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                        <strong>High Risk</strong><br>
+                        <span style="color: #ff6347;">■</span> Susceptibility <br> 0.498 - 0.579
+                    </div>
+                    <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                        <strong>Moderate Risk</strong><br>
+                        <span style="color: #ffd700;">■</span> Susceptibility <br> 0.427 - 0.497
+                    </div>
+                    <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                        <strong>Low Risk</strong><br>
+                        <span style="color: #90ee90ff;">■</span> Susceptibility <br> 0.344 - 0.426
+                    </div>
+                    <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                        <strong>No Risk</strong><br>
+                        <span style="color: #ffffff;">■</span> Susceptibility <br> 0.103 - 0.343
+                    </div>
+                </div>
+            </div>
+            <div class="model-data-section">
+                <h3 style="margin-bottom: 1rem;">Model Data</h3>
+                <div class="model-data-grid"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Page -->
+    <div id="results" class="page">
+        <div class="container">
+            <h1 style="color: white; text-align: center; margin-bottom: 2rem;">Analysis Results</h1>
+            
+            <div class="results-grid">
+                <div class="result-card">
+                    <h3>Model Uncertainty Analysis</h3>
+                    <div class="chart-placeholder">
+                        <span>Uncertainty Distribution Chart</span>
+                    </div>
+                    <p>Statistical analysis of model predictions showing confidence intervals and uncertainty ranges across different terrain characteristics.</p>
+                </div>
+                
+                <div class="result-card">
+                    <h3>Feature Contributions</h3>
+                    <div class="chart-placeholder">
+                        <span>Feature Importance Plot</span>
+                    </div>
+                    <p>Relative importance of different environmental factors (slope, elevation, geology, precipitation) in landslide susceptibility modeling.</p>
+                </div>
+                
+                <div class="result-card">
+                    <h3>Model Performance Metrics</h3>
+                    <div class="chart-placeholder">
+                        <span>ROC Curve & Confusion Matrix</span>
+                    </div>
+                    <p>Accuracy: 87.3%<br>Precision: 84.1%<br>Recall: 89.7%<br>F1-Score: 86.8%</p>
+                </div>
+                
+                <div class="result-card">
+                    <h3>Spatial Distribution</h3>
+                    <div class="chart-placeholder">
+                        <span>Risk Area Statistics</span>
+                    </div>
+                    <p>High Risk: 23.4% of study area<br>Medium Risk: 41.2% of study area<br>Low Risk: 35.4% of study area</p>
+                </div>
+                
+                <div class="result-card">
+                    <h3>Validation Results</h3>
+                    <div class="chart-placeholder">
+                        <span>Cross-validation Scores</span>
+                    </div>
+                    <p>K-fold cross-validation results showing model consistency and generalizability across different data subsets.</p>
+                </div>
+                
+                <div class="result-card">
+                    <h3>Sensitivity Analysis</h3>
+                    <div class="chart-placeholder">
+                        <span>Parameter Sensitivity Plot</span>
+                    </div>
+                    <p>Analysis of how model outputs respond to variations in input parameters and thresholds.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Page -->
+    <div id="about" class="page">
+        <div class="container">
+            <h1 style="color: white; text-align: center; margin-bottom: 2rem;">Landslide Susceptibility Mapping Project</h1>
+            
+            <div class="about-content">
+                <div class="about-section">
+                    <h2>Project Overview</h2>
+                    <p>This comprehensive landslide susceptibility analysis focuses on the municipalities of Sagada and Bontoc, Mountain Province in the Philippines,
+                         utilizing advanced geospatial modeling techniques and machine learning algorithms to assess landslide risk across the region. 
+                         The study integrates multiple environmental factors including topography, geology, hydrology, and land use patterns to create detailed 
+                         susceptibility maps that can inform disaster risk reduction strategies and land use planning decisions.</p>
+                    <br>
+                    <p>This project develops a high-resolution landslide susceptibility map for the Sagada-Bontoc Landscape by employing a sophisticated ensemble 
+                        meta-learning framework. The methodology integrates a diverse suite of base machine learning algorithms to analyze a wide range of geospatial 
+                        predictor variables. A key innovation is the use of an ensemble Recursive Feature Elimination with Cross-Validation (RFECV) process, 
+                        which robustly identifies the most critical environmental factors contributing to landslide events. The individual models are then intelligently combined using an 
+                        optimized Bayesian meta-learner, to maximize predictive accuracy. A significant focus of this research is on uncertainty quantification where 
+                        the framework not only predicts susceptibility but also assesses the confidence of its predictions by incorporating model disagreement, 
+                        prediction calibration, and spatial uncertainty.</p>
+                    <br>
+                    <p>The research employs state-of-the-art remote sensing data, geographic information systems (GIS), and statistical modeling approaches 
+                        to identify areas most vulnerable to landslide occurrence, providing crucial information for local government units, disaster management 
+                        agencies, and community stakeholders.</p>
+                </div>
+                
+                <div class="about-section">
+                    <h2>Research Team & Institutional Linkages</h2>
+                    <p><strong>Lead Institution:</strong></p>
+                    <a href="https://www.bsu.edu.ph" target="_blank" class="partner-card-link" style="text-decoration:none;">
+                        <div class="partner-card">
+                            <img src="assets/logo/BSU_LOGO.png" alt="BSU Logo" class="partner-logo">
+                            <div class="partner-info">
+                                <h3>Benguet State University</h3>
+                                <p>Lead Research Institution</p>
+                            </div>
+                        </div>
+                    </a>
+                    
+                    <p style="margin-top: 2rem;"><strong>Collaborating Partners:</strong></p>
+                    <div class="partners-list">
+                        <div class="partner-card">
+                            <img src="assets/logo/Mountain Province seal.png" alt="PLGU-MP Logo" class="partner-logo">
+                            <div class="partner-info">
+                                <h3>Provincial Local Government Unit - Mountain Province</h3>
+                            </div>
+                        </div>
+                        
+                        <div class="partner-card">
+                            <img src="assets/logo/PDRRMO MP LOGO.jpg" alt="PDRRMO-MP Logo" class="partner-logo">
+                            <div class="partner-info">
+                                <h3>Provincial Disaster Risk Reduction Management Office - Mountain Province</h3>
+                            </div>
+                        </div>
+                        
+                        <div class="partner-card">
+                            <img src="assets/logo/LGU BONTOC LOGO.jpg" alt="Bontoc MLGU Logo" class="partner-logo">
+                            <div class="partner-info">
+                                <h3>Local Government Unit of Bontoc</h3>
+                            </div>
+                        </div>
+
+                        <div class="partner-card">
+                            <img src="assets/logo/MDRRMO BONTOC LOGO.jpg" alt="Bontoc MDRRMO Logo" class="partner-logo">
+                            <div class="partner-info">
+                                <h3>Municipal Disaster Risk Reduction Management Office - Bontoc</h3>
+                            </div>
+                        </div>
+
+                        <div class="partner-card">
+                            <img src="assets/logo/sagada.jpg" alt="Sagada MLGU Logo" class="partner-logo">
+                            <div class="partner-info">
+                                <h3>Local Government Unit of Sagada</h3>
+                            </div>
+                        </div>
+                        
+                        <div class="partner-card">
+                            <img src="assets/logo/sagada.jpg" alt="Sagada MDRRMO Logo" class="partner-logo">
+                            <div class="partner-info">
+                                <h3>Municipal Disaster Risk Reduction Management Office - Sagada</h3>
+                            </div>
+                        </div>
+
+                        <div class="partner-card">
+                            <img src="assets/logo/MPSU.jpg" alt="MPSU Logo" class="partner-logo">
+                            <div class="partner-info">
+                                <h3>Mountain Province State University - Bontoc</h3>
+                            </div>
+                        </div>
+
+                        <div class="partner-card">
+                            <img src="assets/logo/RDE MPSPC Logo.jpg" alt="RDE MPSU Logo" class="partner-logo">
+                            <div class="partner-info">
+                                <h3>Research, Development and Extension - MPSU Bontoc</h3>
+                            </div>
+                        </div>
+                       
+                    </div>
+                </div>
+                
+                <div class="about-section">
+                    <h2>Funding Acknowledgement</h2>
+                    <p>This research project was made possible through the initiative of the project titled <i><strong>"Landslide Susceptibility Analysis, Monitoring, Mapping, 
+                        and Early Warning Systems for Selected Areas in the Cordillera Administrative Region"</strong></i> which was funded by the Department of Science and Technology (DOST) 
+                        and monitored by the Philippine Council for Agriculture, Aquatic and Natural Resources Research and Development (PCAARRD).</p>
+                    <!-- Add funding agencies section -->
+                    <div class="partners-list" style="margin-top: 2rem;">
+                        <a href="https://www.dost.gov.ph/" target="_blank" class="partner-card-link" style="text-decoration:none;">
+                            <div class="partner-card">
+                                <img src="assets/logo/dost.png" alt="DOST Logo" class="partner-logo">
+                                <div class="partner-info">
+                                    <h3>Department of Science and Technology</h3>
+                                    <p>Funding Agency</p>
+                                </div>
+                            </div>
+                        </a>
+                        
+                        <a href="https://www.pcaarrd.dost.gov.ph/" target="_blank" class="partner-card-link" style="text-decoration:none;">
+                            <div class="partner-card">
+                                <img src="assets/logo/pcaarrd.png" alt="PCAARRD Logo" class="partner-logo">
+                                <div class="partner-info">
+                                    <h3>Philippine Council for Agriculture, Aquatic and Natural Resources Research and Development</h3>
+                                    <p>Monitoring Agency</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="about-section">
+                    <h2>Connect With Us</h2>
+                    <p>Stay updated with our latest research projects and extension activities through our social media channels:</p>
+                    
+                    <div class="social-links">
+                        <a href="mailto:geoinformatics@bsu.edu.ph" class="social-link">
+                            <img src="assets/social/gmail.png" alt="Gmail" class="social-icon"> geoinformatics@bsu.edu.ph
+                        </a>
+                        <a href="https://www.facebook.com/centerforgeoinformatics/" class="social-link" target="_blank">
+                            <img src="assets/social/facebook.png" alt="Facebook" class="social-icon"> @centerforgeoinformatics
+                        </a>
+                        <a href="https://www.instagram.com/centerforgeoinformatics/" class="social-link" target="_blank">
+                            <img src="assets/social/instagram.png" alt="Instagram" class="social-icon"> @centerforgeoinformatics
+                        </a>
+                    </div>
+                    <div class="social-links">
+                        <a href="https://x.com/geoinformatics_" class="social-link" target="_blank">
+                            <img src="assets/social/twitter.png" alt="X" class="social-icon"> @geoinformatics_
+                        </a>
+                        <a href="tel:+630744229500" class="social-link">
+                            <img src="assets/social/telephone.png" alt="Phone" class="social-icon"> (074) 422-9500
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="about-section">
+                    <h2>Office Address</h2>
+                    <p>
+                        Room 209, Center for Geoinformatics<br>
+                        Research and Extension Bldg., Benguet State University<br>
+                        KM6, Betag, La Trinidad, Benguet 2601, Philippines<br>
+                    </p>
+                    <div id="office-map" style="width:100%;height:350px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.1);margin-top:1rem;"></div>
+                </div>
+                
+                <div class="about-section" style="text-align:center;">
+                    <p style="font-style: italic; background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 8px;">
+                        &copy; 2025 Benguet State University - Center for Geoinformatics. All rights reserved.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let officeMap = null;
+        const officeCoords = [16.458818, 120.588129];
+
+        // Navigation functionality
+        function showPage(pageId) {
+            // Hide all pages
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
+            
+            // Show selected page
+            document.getElementById(pageId).classList.add('active');
+            
+            // Update active nav link
+            const navLinks = document.querySelectorAll('.nav-links a');
+            navLinks.forEach(link => link.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Add fade-in animation
+            document.getElementById(pageId).classList.add('fade-in');
+            setTimeout(() => {
+                document.getElementById(pageId).classList.remove('fade-in');
+            }, 600);
+
+            // Fix Leaflet map display when Map page is shown
+            if (pageId === 'map' && mainMap) {
+                setTimeout(() => {
+                    mainMap.invalidateSize();
+                }, 300);
+            }
+
+            // Fix Leaflet map display when About page (office map) is shown
+            if (pageId === 'about' && officeMap) {
+                setTimeout(() => {
+                    officeMap.invalidateSize();
+                    officeMap.setView([16.458818, 120.588129], 16);
+                }, 300);
+            }
+        }
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Add navbar auto-hide functionality
+        let lastScroll = 0;
+        const navbar = document.getElementById('navbar');
+        
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            
+            // Determine scroll direction
+            if (currentScroll <= 0) {
+                // At top of page
+                navbar.classList.remove('nav-hidden');
+                return;
+            }
+            
+            if (currentScroll > lastScroll && !navbar.classList.contains('nav-hidden')) {
+                // Scrolling down
+                navbar.classList.add('nav-hidden');
+            } else if (currentScroll < lastScroll && navbar.classList.contains('nav-hidden')) {
+                // Scrolling up
+                navbar.classList.remove('nav-hidden');
+            }
+            
+            lastScroll = currentScroll;
+        });
+
+        // Add click handlers for map controls
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize the main map for the Susceptibility Map page            
+            const mapControls = document.querySelectorAll('.map-controls .btn');
+            mapControls.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const action = this.textContent;
+                    console.log(`Map action: ${action}`);
+                    // Here you would implement the actual functionality
+                    // For example, file upload for TIF files, layer toggling, etc.
+                });
+            });
+
+            // Only initialize the map ONCE
+            if (document.getElementById('office-map')) {
+                const redIcon = L.icon({
+                    iconUrl: 'assets/social/gps.png', // or your red marker icon
+                    iconSize: [50, 50],
+                    iconAnchor: [25, 50],
+                    popupAnchor: [1, -34],
+                    shadowSize: [41, 41]
+                });
+
+                officeMap = L.map('office-map', {center: officeCoords, zoom: 16, zoomControl: true, attributionControl: true});
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; OpenStreetMap contributors'
+                }).addTo(officeMap);
+
+                L.marker(officeCoords, { icon: redIcon }).addTo(officeMap)
+                    .openPopup();
+            }
+
+            // Add Model Data images dynamically
+            const grid = document.querySelector('.model-data-grid');
+            if (grid) {
+                for (let i = 1; i <= 30; i++) {
+                    const imgSrc = `assets/model_data/image${i}.jpeg`; // Change path/extension as needed
+                    const a = document.createElement('a');
+                    a.href = imgSrc;
+                    a.target = '_blank';
+                    a.rel = 'noopener';
+                    const img = document.createElement('img');
+                    img.src = imgSrc;
+                    img.alt = `Model Data ${i}`;
+                    img.className = 'model-data-img';
+                    a.appendChild(img);
+                    grid.appendChild(a);
+                }
+            }
+            
+        });
+
+        
+        //fetch('./data/landslide_susceptibility.geojson')
+        //    .then(response => response.json())
+        //    .then(data => {
+        //        if (mainMap) {
+        //            const layer = L.geoJSON(data, {
+        //                style: styleFunction,
+        //               onEachFeature: popupFunction
+        //            }).addTo(mainMap);
+        //        }
+        //    });
+
+        function getColorForValue(value) {
+            if (value >= 0.7) return '#dc3545'; // High risk - Red
+            if (value >= 0.3) return '#ff8c00'; // Medium risk - Orange  
+            if (value > 0) return '#ffd700';    // Low risk - Yellow
+            return 'transparent';               // No data
+        }
+
+        
+    </script>
+    <!-- For GeoTIFF support (optional) -->
+    <script src="https://cdn.jsdelivr.net/npm/geotiff@2.0.7/dist-browser/geotiff.js"></script>
+
+    <!-- For map export (optional) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <!-- For PDF export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <!-- Your map integration script -->
+    <script src="js/map-integration.js"></script>
+</body>
+</html>
